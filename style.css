@@ -1,0 +1,26 @@
+body {
+    color: aliceblue;
+    background-color: rgb(39, 35, 35);
+}
+
+.container-registro-veiculo {
+    margin-top:30px;
+}
+
+.container-patio {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.modal {
+    color: black;
+}
+
+.offcanvas {
+    background-color: rgb(39, 35, 35);
+    color: aliceblue;
+}
+
+.margin-bottom {
+    margin-bottom: 5px;
+}

@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Controle de Estacionamento</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -25,6 +25,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                </ul>
+                <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
                             data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
@@ -35,7 +37,6 @@
                                 <path
                                     d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
                             </svg>
-                            Configurações
                         </button>
                         </a>
                     </li>
@@ -45,7 +46,7 @@
     </nav>
 
     <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop"
-        aria-labelledby="staticBackdropLabel" style="width: 500px;">
+        aria-labelledby="staticBackdropLabel" style="width: 550px;">
         <div class="offcanvas-header">
             <h4 class="offcanvas-title" id="staticBackdropLabel">Configurações</h4>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -148,54 +149,10 @@
                         <input type="number" class="form-control" id="parametroValor-5">
                     </div>
                 </div>
-                <button onclick="salvarParametros()">Salvar</button>
+                <hr>
+                <button class="btn btn-primary" id="liveToastBtn" onclick="salvarParametros()">Salvar</button>
             </div>
         </div>
-    </div>
-
-    <div class="container container-registro-veiculo">
-        <div class="row mb-3">
-            <label for="nome-veiculo" class="col-sm-1 col-form-label">Veículo:</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="nome-veiculo">
-            </div>
-        </div>
-        <div class="row mb-3">
-            <label for="placa-veiculo" class="col-sm-1 col-form-label">Placa:</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="placa-veiculo">
-            </div>
-        </div>
-        <div class="row mb-3">
-            <label for="hora-entrada" class="col-sm-1 col-form-label">Hora Entrada:</label>
-            <div class="col-sm-2">
-                <input type="time" class="form-control" id="hora-entrada">
-            </div>
-        </div>
-        <fieldset class="row mb-3">
-            <legend class="col-form-label col-sm-1 pt-0">Tipo Veículo:</legend>
-            <div class="col-sm-10">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="tipo-veiculo" id="tipo-carro-veiculo"
-                        value="tipo-carro-veiculo" checked>
-                    <label class="form-check-label" for="tipo-carro-veiculo">
-                        Carro
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="tipo-veiculo" id="tipo-moto-veiculo"
-                        value="tipo-moto-veiculo">
-                    <label class="form-check-label" for="tipo-moto-veiculo">
-                        Moto
-                    </label>
-                </div>
-            </div>
-        </fieldset>
-        <button onclick="entradaVeiculo()" class="btn btn-primary">Confirmar</button>
-    </div>
-    <div class="container">
-        <h1>Patio</h1>
-        <div class="container-patio"></div>
     </div>
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -215,6 +172,94 @@
           </div>
         </div>
       </div>
-</body>
 
+      <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <strong class="me-auto">Sucesso</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            Alterações salvas!
+          </div>
+        </div>
+      </div>
+
+    <div class="container container-conteudo">
+        <div class="container container-registro-veiculo">
+            <div class="row mb-3">
+                <label for="nome-veiculo" class="col-form-label">Modelo:</label>
+                <div class="col">
+                    <input type="text" class="form-control" id="nome-veiculo">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="placa-veiculo" class="col-form-label">Placa:</label>
+                <div class="col">
+                    <input type="text" class="form-control" id="placa-veiculo">
+                </div>
+            </div>
+            <div class="row">
+                <label for="hora-entrada" class="col-sm-2 col-form-label">Hora Entrada:</label>
+                <div class="col">
+                    <input type="time" class="form-control" id="hora-entrada">
+                </div>
+            </div>
+            <fieldset class="row mb-3">
+                <legend class="col-form-label pt-0">Tipo Veículo:</legend>
+                <div class="col">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tipo-veiculo" id="tipo-carro-veiculo"
+                            value="tipo-carro-veiculo" checked>
+                        <label class="form-check-label" for="tipo-carro-veiculo">
+                            Carro
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tipo-veiculo" id="tipo-moto-veiculo"
+                            value="tipo-moto-veiculo">
+                        <label class="form-check-label" for="tipo-moto-veiculo">
+                            Moto
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+            <button onclick="entradaVeiculo()" class="btn btn-primary">Confirmar</button>
+        </div>
+        <div class="Container container-numero-veiculos-patio">
+            <div class="container container-numero-carros">
+                <h5>Carros no Patio:</h5>
+                <div class="organizar-caixas">
+                    <div class="box caixa-1"></div>
+                    <div class="box caixa-2"></div>
+                    <div class="box caixa-3"></div>
+                    <div class="box caixa-4"></div>
+                    <div class="box caixa-5"></div>
+                </div>
+            </div>
+            <div class="container container-numero-motos">
+                <h5>Motos no Patio:</h5>
+                <div class="organizar-caixas">
+                    <div class="box caixa-1"></div>
+                    <div class="box caixa-2"></div>
+                    <div class="box caixa-3"></div>
+                    <div class="box caixa-4"></div>
+                    <div class="box caixa-5"></div>
+                </div>
+            </div>
+        </div>
+        <div class="container container-patio">
+            <h1>Patio</h1>
+            <div class="container container-cards">
+                <p class="text-patio-vazio">Seu patio está vazio!</p>
+                <img class="img-grilo-vazio" src="imagens/grilo-vazio.png" alt="iamgem-grilo">
+            </div>
+        </div>
+        <div class="footer">
+            <p>Desenvolvido por Mateus Ceolin Orben</p>
+            <p>linkedin</p>
+            <p>github</p>
+        </div>
+    </div>
+</body>
 </html>

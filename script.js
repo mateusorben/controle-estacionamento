@@ -1,7 +1,7 @@
 const nomeVeiculo = document.getElementById("nome-veiculo");
 const horaEntrada = document.getElementById("hora-entrada");
 const placa = document.getElementById("placa-veiculo");
-const containerPatio = document.querySelector(".container-patio");
+const containerCards = document.querySelector(".container-cards");
 let idCard = 0;
 
 function entradaVeiculo() {
@@ -63,6 +63,15 @@ document.addEventListener('click', (e) => {
 let tipoVeiculoFormatado;
 
 function criarCardVeiculo(idCard, nomeVeiculoCard, horaEntradaCard, placaCard, tipoVeiculoCard) {
+    const textPatioVazio = document.querySelector(".text-patio-vazio"); 
+    const imgGriloVazio = document.querySelector(".img-grilo-vazio"); 
+
+    if(textPatioVazio && imgGriloVazio) {
+        textPatioVazio.remove()
+        imgGriloVazio.remove()
+        
+        containerCards.style.flexDirection = "row";
+    }
 
     var cardDiv = document.createElement("div");
     cardDiv.className = "card";
@@ -89,18 +98,18 @@ function criarCardVeiculo(idCard, nomeVeiculoCard, horaEntradaCard, placaCard, t
 
     var cardTextHrEntrada = document.createElement("p");
     cardTextHrEntrada.className = "card-text-hora-entrar";
-    cardTextHrEntrada.textContent = horaEntradaCard;
+    cardTextHrEntrada.textContent = "Hora Entrada: " + horaEntradaCard;
 
     var cardTextPlaca = document.createElement("p");
     cardTextPlaca.className = "card-text-placa";
-    cardTextPlaca.textContent = placaCard;
+    cardTextPlaca.textContent = "Placa: " + placaCard;
 
     var cardLink1 = document.createElement("button");
-    cardLink1.className = "card-button-open-modal";
+    cardLink1.className = "card-button-open-modal btn btn-primary";
     cardLink1.textContent = "Finalizar";
 
     var cardLink2 = document.createElement("button");
-    cardLink2.className = "card-button-delete-card";
+    cardLink2.className = "card-button-delete-card btn btn-danger";
     cardLink2.textContent = "Excluir";
 
     cardBodyDiv.appendChild(cardTitle);
@@ -111,7 +120,7 @@ function criarCardVeiculo(idCard, nomeVeiculoCard, horaEntradaCard, placaCard, t
     cardBodyDiv.appendChild(cardLink2);
     cardDiv.appendChild(cardBodyDiv);
 
-    containerPatio.appendChild(cardDiv)
+    containerCards.appendChild(cardDiv)
 }
 
 function abrirModalFinalizarVeiculo(cardId, nomeVeiculoModal, horaEntradaModal, placaModal) {
@@ -268,3 +277,13 @@ function carregarParametros() {
 }
 
 document.addEventListener("DOMContentLoaded", carregarParametros);
+
+const toastTrigger = document.getElementById('liveToastBtn')
+const toastLiveExample = document.getElementById('liveToast')
+
+if (toastTrigger) {
+  const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+  toastTrigger.addEventListener('click', () => {
+    toastBootstrap.show()
+  })
+}

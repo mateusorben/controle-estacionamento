@@ -72,7 +72,8 @@ body {
     flex-direction: column;
 }
 
-.organizar-caixas {
+.organizar-caixas-carros,
+.organizar-caixas-motos {
     display: flex;
     max-width: 500px;
     flex-wrap: wrap;
@@ -86,7 +87,7 @@ body {
     margin: 3px;
 }
 
-.caixa-1 {
+.box.ocupado {
     background-color: green;
 }
 
@@ -112,6 +113,8 @@ body {
 }
 
 .footer {
+    display: flex;
+    flex-direction: column;
     background-color: black;
     padding: 20px;
     border-radius: 10px;

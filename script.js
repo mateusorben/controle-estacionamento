@@ -4,6 +4,7 @@ const placa = document.getElementById("placa-veiculo");
 const containerCards = document.querySelector(".container-cards");
 const textPatioVazio = document.querySelector(".text-patio-vazio"); 
 const imgGriloVazio = document.querySelector(".img-grilo-vazio"); 
+const caixasContainer = document.querySelector(".organizar-caixas-carros");
 let idCard = 0;
 
 function entradaVeiculo() {
@@ -28,6 +29,11 @@ function entradaVeiculo() {
         nomeVeiculo.value = "";
         horaEntrada.value = "";
         placa.value = "";
+
+        const caixaOcupada = caixasContainer.querySelector(".box:not(.ocupado)");
+        if (caixaOcupada) {
+            caixaOcupada.classList.add("ocupado");
+        }
     }
 }
 
@@ -67,6 +73,15 @@ document.addEventListener('click', (e) => {
             imgGriloVazio.style.display = "block";
             containerCards.style.flexDirection = "column";
         }
+
+        const caixaOcupada = caixasContainer.querySelector(".box.ocupado");
+    
+        if (caixaOcupada) {
+            // Remova a classe "ocupado" da caixa para indicar que a vaga está disponível
+            caixaOcupada.classList.remove("ocupado");
+        } else {
+            alert('Não há veículos para sair.');
+        }
     }
 
     if (targetEl.classList.contains("btn-modal-confirmar")) {
@@ -82,6 +97,15 @@ document.addEventListener('click', (e) => {
                 cardToRemove.remove();
             }
         });
+
+        const caixaOcupada = caixasContainer.querySelector(".box.ocupado");
+    
+        if (caixaOcupada) {
+            // Remova a classe "ocupado" da caixa para indicar que a vaga está disponível
+            caixaOcupada.classList.remove("ocupado");
+        } else {
+            alert('Não há veículos para sair.');
+        }
 
         const todosCardsVerificarSeAindaExisteAlgum = document.querySelectorAll(".card");
 
@@ -246,6 +270,9 @@ function calcularDiferencaEmMinutos(hora1, hora2) {
 
 function salvarParametros() {
     const parametros = {
+        parametroLimiteCarros: document.getElementById("limite-veiculo-carros").value,
+        parametroLimiteMotos: document.getElementById("limite-veiculo-motos").value,
+
         parametro1: document.getElementById("parametroCrobanca-1").value,
         valor1: document.getElementById("parametroValor-1").value,
         parametro2: {
@@ -274,6 +301,8 @@ function salvarParametros() {
 
     // Salvar a string JSON no localStorage
     localStorage.setItem('parametros', parametrosJSON);
+
+    criarBoxesVeiculos(parametros.parametroLimiteCarros, parametros.parametroLimiteMotos);
 }
 
 function carregarParametros() {
@@ -286,6 +315,9 @@ function carregarParametros() {
 
         // Agora você pode acessar os valores como parametros.parametro1, parametros.valor1, etc.
         // Use esses valores para preencher os elementos HTML conforme necessário.
+        document.getElementById("limite-veiculo-carros").value = parametros.parametroLimiteCarros;
+        document.getElementById("limite-veiculo-motos").value = parametros.parametroLimiteMotos;
+
         document.getElementById("parametroCrobanca-1").value = parametros.parametro1;
         document.getElementById("parametroValor-1").value = parametros.valor1;
 
@@ -316,4 +348,27 @@ if (toastTrigger) {
   toastTrigger.addEventListener('click', () => {
     toastBootstrap.show()
   })
+}
+
+function criarBoxesVeiculos(numBoxesCarros, numBoxesMotos) {
+    const organizarCaixasCarros = document.querySelector(".organizar-caixas-carros");
+    const organizarCaixasMotos = document.querySelector(".organizar-caixas-motos");
+
+    for (let i = 0; i < numBoxesCarros; i++) {
+        // Crie um novo elemento 'box'
+        const boxElement = document.createElement("div");
+        boxElement.classList.add("box"); // Adicione a classe "box" ao elemento
+
+        // Adicione o elemento 'box' ao contêiner pai
+        organizarCaixasCarros.appendChild(boxElement);
+    }
+
+    for (let i = 0; i < numBoxesMotos; i++) {
+        // Crie um novo elemento 'box'
+        const boxElement = document.createElement("div");
+        boxElement.classList.add("box"); // Adicione a classe "box" ao elemento
+
+        // Adicione o elemento 'box' ao contêiner pai
+        organizarCaixasMotos.appendChild(boxElement);
+    }
 }

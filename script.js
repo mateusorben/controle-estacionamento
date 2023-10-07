@@ -2,6 +2,8 @@ const nomeVeiculo = document.getElementById("nome-veiculo");
 const horaEntrada = document.getElementById("hora-entrada");
 const placa = document.getElementById("placa-veiculo");
 const containerCards = document.querySelector(".container-cards");
+const textPatioVazio = document.querySelector(".text-patio-vazio"); 
+const imgGriloVazio = document.querySelector(".img-grilo-vazio"); 
 let idCard = 0;
 
 function entradaVeiculo() {
@@ -45,6 +47,7 @@ document.addEventListener('click', (e) => {
             let cardIdSelecao = card.getAttribute("data_id");
 
             if(cardIdSelecao && cardIdSelecao.trim().toLowerCase() === cardId.trim().toLowerCase()) {
+                localStorage.setItem("idCardSelecionado", cardIdSelecao)
                 let nomeVeiculoModal = card.querySelector(".card-title"); 
                 let horaEntradaModal = card.querySelector(".card-text-hora-entrar"); 
                 let placaModal = card.querySelector(".card-text-placa"); 
@@ -56,18 +59,46 @@ document.addEventListener('click', (e) => {
 
     if(targetEl.classList.contains("card-button-delete-card")) {
         parentEl.remove();
+
+        const todosCards = document.querySelectorAll(".card");
+
+        if (todosCards.length === 0) {
+            textPatioVazio.style.display = "block";
+            imgGriloVazio.style.display = "block";
+            containerCards.style.flexDirection = "column";
+        }
+    }
+
+    if (targetEl.classList.contains("btn-modal-confirmar")) {
+        let idCardRecuperadoLS = localStorage.getItem("idCardSelecionado");
+
+        const todosCards = document.querySelectorAll(".card");
+
+        todosCards.forEach((card) => {
+            let cardIdSelecao = card.getAttribute("data_id");
+
+            if(cardIdSelecao && cardIdSelecao.trim().toLowerCase() === idCardRecuperadoLS.trim().toLowerCase()) {
+                const cardToRemove = document.querySelector(`.card[data_id="${idCardRecuperadoLS}"]`);
+                cardToRemove.remove();
+            }
+        });
+
+        const todosCardsVerificarSeAindaExisteAlgum = document.querySelectorAll(".card");
+
+        if (todosCardsVerificarSeAindaExisteAlgum.length === 0) {
+            textPatioVazio.style.display = "block";
+            imgGriloVazio.style.display = "block";
+            containerCards.style.flexDirection = "column";
+        }
     }
 });
 
 let tipoVeiculoFormatado;
 
 function criarCardVeiculo(idCard, nomeVeiculoCard, horaEntradaCard, placaCard, tipoVeiculoCard) {
-    const textPatioVazio = document.querySelector(".text-patio-vazio"); 
-    const imgGriloVazio = document.querySelector(".img-grilo-vazio"); 
-
     if(textPatioVazio && imgGriloVazio) {
-        textPatioVazio.remove()
-        imgGriloVazio.remove()
+        textPatioVazio.style.display = "none";
+        imgGriloVazio.style.display = "none";
         
         containerCards.style.flexDirection = "row";
     }

@@ -26,7 +26,6 @@ function entradaVeiculo() {
         nomeVeiculo.value = "";
         horaEntrada.value = "";
         placa.value = "";
-        nomeVeiculo.focus();
     }
 }
 
@@ -98,11 +97,11 @@ function criarCardVeiculo(idCard, nomeVeiculoCard, horaEntradaCard, placaCard, t
 
     var cardTextHrEntrada = document.createElement("p");
     cardTextHrEntrada.className = "card-text-hora-entrar";
-    cardTextHrEntrada.textContent = "Hora Entrada: " + horaEntradaCard;
+    cardTextHrEntrada.textContent = horaEntradaCard;
 
     var cardTextPlaca = document.createElement("p");
     cardTextPlaca.className = "card-text-placa";
-    cardTextPlaca.textContent = "Placa: " + placaCard;
+    cardTextPlaca.textContent = placaCard;
 
     var cardLink1 = document.createElement("button");
     cardLink1.className = "card-button-open-modal btn btn-primary";

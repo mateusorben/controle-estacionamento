@@ -280,20 +280,16 @@ function obterHoraAtualFormatada() {
 }
 
 function calcularDiferencaEmMinutos(hora1, hora2) {
-    // Divida as horas e os minutos
     var partesHora1 = hora1.split(":");
     var partesHora2 = hora2.split(":");
 
-    // Converta as horas e os minutos para minutos
     var minutosHora1 = parseInt(partesHora1[0]) * 60 + parseInt(partesHora1[1]);
     var minutosHora2 = parseInt(partesHora2[0]) * 60 + parseInt(partesHora2[1]);
 
-    // Calcule a diferença em minutos
     var diferencaEmMinutos = minutosHora2 - minutosHora1;
 
-    // Lide com casos em que a diferença pode ser negativa ou maior que 24 horas
     if (diferencaEmMinutos < 0) {
-        diferencaEmMinutos += 24 * 60; // Adicione 24 horas em minutos
+        diferencaEmMinutos += 24 * 60; 
     }
 
     return diferencaEmMinutos;
@@ -327,11 +323,15 @@ function salvarParametros() {
         }
     };
 
-    // Converter o objeto para uma string JSON
     const parametrosJSON = JSON.stringify(parametros);
 
-    // Salvar a string JSON no localStorage
     localStorage.setItem('parametros', parametrosJSON);
+
+    const textoParaIrAsConfiguracoes = document.querySelectorAll(".texto-para-ir-as-configuracoes");
+
+    textoParaIrAsConfiguracoes.forEach(element => {
+        element.style.display = "none";
+    });    
 
     criarBoxesVeiculos(parametros.parametroLimiteCarros, parametros.parametroLimiteMotos);
 }

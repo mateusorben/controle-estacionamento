@@ -4,7 +4,8 @@ const placa = document.getElementById("placa-veiculo");
 const containerCards = document.querySelector(".container-cards");
 const textPatioVazio = document.querySelector(".text-patio-vazio"); 
 const imgGriloVazio = document.querySelector(".img-grilo-vazio"); 
-const caixasContainer = document.querySelector(".organizar-caixas-carros");
+const caixasContainerCarros = document.querySelector(".organizar-caixas-carros");
+const caixasContainerMotos = document.querySelector(".organizar-caixas-motos");
 let idCard = 0;
 
 function entradaVeiculo() {
@@ -30,14 +31,24 @@ function entradaVeiculo() {
         horaEntrada.value = "";
         placa.value = "";
 
-        const caixaOcupada = caixasContainer.querySelector(".box:not(.ocupado)");
-        if (caixaOcupada) {
-            caixaOcupada.classList.add("ocupado");
+        const caixaOcupadaCarros = caixasContainerCarros.querySelector(".box-carros:not(.ocupado)");
+        const caixaOcupadaMotos = caixasContainerMotos.querySelector(".box-motos:not(.ocupado)");
+        
+        if (tipoVeiculoSelecionado == "tipo-carro-veiculo") {
+            if (caixaOcupadaCarros) {
+                caixaOcupadaCarros.classList.add("ocupado");
+            }
+        } else {
+            if (caixaOcupadaMotos) {
+                caixaOcupadaMotos.classList.add("ocupado");
+            }
         }
     }
 }
 
 document.addEventListener('click', (e) => {
+    const caixaOcupadaCarro = caixasContainerCarros.querySelector(".ocupado");
+    const caixaOcupadaMoto = caixasContainerMotos.querySelector(".ocupado");
     const targetEl = e.target;
     const parentEl = targetEl.closest("div");
     let cardId;
@@ -64,23 +75,40 @@ document.addEventListener('click', (e) => {
     }
 
     if(targetEl.classList.contains("card-button-delete-card")) {
+
+        let todosCards = document.querySelectorAll(".card");
+
+        if (parentEl && parentEl.getAttribute("data_id")) {
+            cardId = parentEl.getAttribute("data_id");
+        }
+
+        todosCards.forEach((card) => {
+            let cardIdSelecao = card.getAttribute("data_id");
+
+            if(cardIdSelecao && cardIdSelecao.trim().toLowerCase() === cardId.trim().toLowerCase()) {
+                let tipoVeiculo = card.querySelector(".card-subtitle").textContent; 
+                console.log(tipoVeiculo)
+
+                if (tipoVeiculo == "Carro") {
+                    if (caixaOcupadaCarro) {
+                        caixaOcupadaCarro.classList.remove("ocupado");
+                    } 
+                } else {
+                    if (caixaOcupadaMoto) {
+                        caixaOcupadaMoto.classList.remove("ocupado");
+                    } 
+                }
+            }
+        });
+
         parentEl.remove();
 
-        const todosCards = document.querySelectorAll(".card");
+        todosCards = document.querySelectorAll(".card");
 
         if (todosCards.length === 0) {
             textPatioVazio.style.display = "block";
             imgGriloVazio.style.display = "block";
             containerCards.style.flexDirection = "column";
-        }
-
-        const caixaOcupada = caixasContainer.querySelector(".box.ocupado");
-    
-        if (caixaOcupada) {
-            // Remova a classe "ocupado" da caixa para indicar que a vaga está disponível
-            caixaOcupada.classList.remove("ocupado");
-        } else {
-            alert('Não há veículos para sair.');
         }
     }
 
@@ -94,18 +122,21 @@ document.addEventListener('click', (e) => {
 
             if(cardIdSelecao && cardIdSelecao.trim().toLowerCase() === idCardRecuperadoLS.trim().toLowerCase()) {
                 const cardToRemove = document.querySelector(`.card[data_id="${idCardRecuperadoLS}"]`);
+                let tipoVeiculo = card.querySelector(".card-subtitle").textContent; 
+                console.log(tipoVeiculo)
+
+                if (tipoVeiculo == "Carro") {
+                    if (caixaOcupadaCarro) {
+                        caixaOcupadaCarro.classList.remove("ocupado");
+                    } 
+                } else {
+                    if (caixaOcupadaMoto) {
+                        caixaOcupadaMoto.classList.remove("ocupado");
+                    } 
+                }
                 cardToRemove.remove();
             }
         });
-
-        const caixaOcupada = caixasContainer.querySelector(".box.ocupado");
-    
-        if (caixaOcupada) {
-            // Remova a classe "ocupado" da caixa para indicar que a vaga está disponível
-            caixaOcupada.classList.remove("ocupado");
-        } else {
-            alert('Não há veículos para sair.');
-        }
 
         const todosCardsVerificarSeAindaExisteAlgum = document.querySelectorAll(".card");
 
@@ -354,21 +385,26 @@ function criarBoxesVeiculos(numBoxesCarros, numBoxesMotos) {
     const organizarCaixasCarros = document.querySelector(".organizar-caixas-carros");
     const organizarCaixasMotos = document.querySelector(".organizar-caixas-motos");
 
-    for (let i = 0; i < numBoxesCarros; i++) {
-        // Crie um novo elemento 'box'
-        const boxElement = document.createElement("div");
-        boxElement.classList.add("box"); // Adicione a classe "box" ao elemento
+    const todasBoxesCarros = document.querySelectorAll(".box-carros");
+    const todasBoxesMotos = document.querySelectorAll(".box-motos");
 
-        // Adicione o elemento 'box' ao contêiner pai
+    let numBoxesCarrosNum = Number(numBoxesCarros);
+    let numBoxesMotosNum = Number(numBoxesMotos);
+
+    todasBoxesCarros.forEach(box => box.remove());
+    todasBoxesMotos.forEach(box => box.remove());
+
+    for (let i = 0; i < numBoxesCarrosNum; i++) {
+        const boxElement = document.createElement("div");
+        boxElement.classList.add("box-carros"); 
+
         organizarCaixasCarros.appendChild(boxElement);
     }
 
-    for (let i = 0; i < numBoxesMotos; i++) {
-        // Crie um novo elemento 'box'
+    for (let i = 0; i < numBoxesMotosNum; i++) {
         const boxElement = document.createElement("div");
-        boxElement.classList.add("box"); // Adicione a classe "box" ao elemento
+        boxElement.classList.add("box-motos"); 
 
-        // Adicione o elemento 'box' ao contêiner pai
         organizarCaixasMotos.appendChild(boxElement);
     }
 }

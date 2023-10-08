@@ -79,7 +79,8 @@ body {
     flex-wrap: wrap;
 }
 
-.box {
+.box-carros,
+.box-motos {
     background-color: gray;
     height: 15px;
     width: 15px;
@@ -87,7 +88,7 @@ body {
     margin: 3px;
 }
 
-.box.ocupado {
+.ocupado {
     background-color: green;
 }
 
@@ -112,6 +113,10 @@ body {
     color: black;
 }
 
+a {
+    text-decoration: none;
+}
+
 .footer {
     display: flex;
     flex-direction: column;
@@ -123,6 +128,10 @@ body {
     height: 200px;
     grid-area: "footer";
     grid-column: footer;
+}
+
+.icone-github {
+    margin-left: 8px;
 }
 
 @media only screen and (max-width: 412px) {

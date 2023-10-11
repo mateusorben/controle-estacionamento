@@ -67,9 +67,9 @@ body {
     width: 250px;
 }
 
-.container-numero-carros {
-    display: flex;
-    flex-direction: column;
+.container-numero-carros,
+.container-numero-motos {
+    margin-top: 20px;
 }
 
 .organizar-caixas-carros,
@@ -115,6 +115,10 @@ body {
 
 a {
     text-decoration: none;
+}
+
+.bi-cash-coin {
+    margin-right: 30px;
 }
 
 .footer {

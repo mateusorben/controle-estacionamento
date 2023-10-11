@@ -2,11 +2,15 @@ const nomeVeiculo = document.getElementById("nome-veiculo");
 const horaEntrada = document.getElementById("hora-entrada");
 const placa = document.getElementById("placa-veiculo");
 const containerCards = document.querySelector(".container-cards");
-const textPatioVazio = document.querySelector(".text-patio-vazio"); 
-const imgGriloVazio = document.querySelector(".img-grilo-vazio"); 
 const caixasContainerCarros = document.querySelector(".organizar-caixas-carros");
 const caixasContainerMotos = document.querySelector(".organizar-caixas-motos");
+const qtdAtualCarrosPatio = document.querySelector(".qtd-atual-carros-patio");
+const qtdAtualMotosPatio = document.querySelector(".qtd-atual-motos-patio");
 let idCard = 0;
+let qtdAtualCarrosPatioCount = 0;
+let qtdAtualMotosPatioCount = 0;
+let patioCheioCarros;
+let patioCheioMotos;
 
 function entradaVeiculo() {
     const tipoVeiculo = document.getElementsByName("tipo-veiculo");
@@ -25,22 +29,65 @@ function entradaVeiculo() {
     } else if (placa.value === '' || placa.value === null) {
         alert('Insira a placa do veículo!');
     } else {
-        idCard++;
-        criarCardVeiculo(idCard, nomeVeiculo.value, horaEntrada.value, placa.value, tipoVeiculoSelecionado);
-        nomeVeiculo.value = "";
-        horaEntrada.value = "";
-        placa.value = "";
+        const parametrosJSON = localStorage.getItem('parametros');
+        let limiteCarrosConfg;
+        let limiteMotosConfg;
 
+        if (parametrosJSON) {
+            const parametros = JSON.parse(parametrosJSON);
+
+            limiteCarrosConfg = parametros.parametroLimiteCarros;
+            limiteMotosConfg  = parametros.parametroLimiteMotos;
+        }
+
+        if (tipoVeiculoSelecionado == "tipo-carro-veiculo") {
+            if (patioCheioCarros) {
+                alert("Atenção! Patio cheio de carros!")
+            } else {
+                idCard++;
+                criarCardVeiculo(idCard, nomeVeiculo.value, horaEntrada.value, placa.value, tipoVeiculoSelecionado);
+                nomeVeiculo.value = "";
+                horaEntrada.value = "";
+                placa.value = "";
+            }
+        } else {
+            if (patioCheioMotos) {
+                alert("Atenção! Patio cheio de motos!")
+            } else {
+                idCard++;
+                criarCardVeiculo(idCard, nomeVeiculo.value, horaEntrada.value, placa.value, tipoVeiculoSelecionado);
+                nomeVeiculo.value = "";
+                horaEntrada.value = "";
+                placa.value = "";
+            }
+        }
+        
         const caixaOcupadaCarros = caixasContainerCarros.querySelector(".box-carros:not(.ocupado)");
         const caixaOcupadaMotos = caixasContainerMotos.querySelector(".box-motos:not(.ocupado)");
         
         if (tipoVeiculoSelecionado == "tipo-carro-veiculo") {
             if (caixaOcupadaCarros) {
                 caixaOcupadaCarros.classList.add("ocupado");
+                qtdAtualCarrosPatioCount++;
+                qtdAtualCarrosPatio.innerText = qtdAtualCarrosPatioCount;
+                if ((qtdAtualCarrosPatioCount + 1) == limiteCarrosConfg) {
+                    alert("Atenção! Espaço para apenas mais um carro.");
+                } else if (qtdAtualCarrosPatioCount == limiteCarrosConfg) {
+                    alert("Atenção! Não há mais espaço para carros no patio.");
+                    patioCheioCarros = true;
+                }
             }
         } else {
             if (caixaOcupadaMotos) {
                 caixaOcupadaMotos.classList.add("ocupado");
+                qtdAtualMotosPatioCount++;
+                qtdAtualMotosPatio.innerText = qtdAtualMotosPatioCount;
+                if ((qtdAtualMotosPatioCount + 1) == limiteMotosConfg) {
+                    alert("Atenção! Espaço para apenas mais uma moto.");
+                } else if (qtdAtualMotosPatioCount == limiteMotosConfg) {
+                    alert("Atenção! Não há mais espaço para motos no patio.");
+                    patioCheioMotos = true;
+                }
             }
         }
     }
@@ -63,7 +110,7 @@ document.addEventListener('click', (e) => {
         todosCards.forEach((card) => {
             let cardIdSelecao = card.getAttribute("data_id");
 
-            if(cardIdSelecao && cardIdSelecao.trim().toLowerCase() === cardId.trim().toLowerCase()) {
+            if(cardIdSelecao && cardIdSelecao == cardId) {
                 localStorage.setItem("idCardSelecionado", cardIdSelecao)
                 let nomeVeiculoModal = card.querySelector(".card-title"); 
                 let horaEntradaModal = card.querySelector(".card-text-hora-entrar"); 
@@ -76,39 +123,46 @@ document.addEventListener('click', (e) => {
 
     if(targetEl.classList.contains("card-button-delete-card")) {
 
-        let todosCards = document.querySelectorAll(".card");
+        if (confirm("Deseja realmente excluir o veículo?") == true) {
+            let todosCards = document.querySelectorAll(".card");
 
-        if (parentEl && parentEl.getAttribute("data_id")) {
-            cardId = parentEl.getAttribute("data_id");
-        }
-
-        todosCards.forEach((card) => {
-            let cardIdSelecao = card.getAttribute("data_id");
-
-            if(cardIdSelecao && cardIdSelecao.trim().toLowerCase() === cardId.trim().toLowerCase()) {
-                let tipoVeiculo = card.querySelector(".card-subtitle").textContent; 
-                console.log(tipoVeiculo)
-
-                if (tipoVeiculo == "Carro") {
-                    if (caixaOcupadaCarro) {
-                        caixaOcupadaCarro.classList.remove("ocupado");
-                    } 
-                } else {
-                    if (caixaOcupadaMoto) {
-                        caixaOcupadaMoto.classList.remove("ocupado");
-                    } 
-                }
+            if (parentEl && parentEl.getAttribute("data_id")) {
+                cardId = parentEl.getAttribute("data_id");
             }
-        });
 
-        parentEl.remove();
+            todosCards.forEach((card) => {
+                let cardIdSelecao = card.getAttribute("data_id");
 
-        todosCards = document.querySelectorAll(".card");
+                if(cardIdSelecao && cardIdSelecao == cardId) {
+                    let tipoVeiculo = card.querySelector(".card-subtitle").textContent; 
 
-        if (todosCards.length === 0) {
-            textPatioVazio.style.display = "block";
-            imgGriloVazio.style.display = "block";
-            containerCards.style.flexDirection = "column";
+                    if (tipoVeiculo == "Carro") {
+                        if (caixaOcupadaCarro) {
+                            caixaOcupadaCarro.classList.remove("ocupado");
+                            qtdAtualCarrosPatioCount--;
+                            qtdAtualCarrosPatio.innerText = qtdAtualCarrosPatioCount;
+                            patioCheioCarros = false;
+                        } 
+                    } else {
+                        if (caixaOcupadaMoto) {
+                            caixaOcupadaMoto.classList.remove("ocupado");
+                            qtdAtualMotosPatioCount--;
+                            qtdAtualMotosPatio.innerText = qtdAtualMotosPatioCount;
+                            patioCheioMotos = false;
+                        } 
+                    }
+                }
+            });
+
+            parentEl.remove();
+
+            todosCards = document.querySelectorAll(".card");
+
+            if (todosCards.length === 0) {
+                textPatioVazio.style.display = "block";
+                imgGriloVazio.style.display = "block";
+                containerCards.style.flexDirection = "column";
+            }
         }
     }
 
@@ -128,10 +182,16 @@ document.addEventListener('click', (e) => {
                 if (tipoVeiculo == "Carro") {
                     if (caixaOcupadaCarro) {
                         caixaOcupadaCarro.classList.remove("ocupado");
+                        qtdAtualCarrosPatioCount--;
+                        qtdAtualCarrosPatio.innerText = qtdAtualCarrosPatioCount;
+                        patioCheioCarros = false;
                     } 
                 } else {
                     if (caixaOcupadaMoto) {
                         caixaOcupadaMoto.classList.remove("ocupado");
+                        qtdAtualMotosPatioCount--;
+                        qtdAtualMotosPatio.innerText = qtdAtualMotosPatioCount;
+                        patioCheioMotos = false;
                     } 
                 }
                 cardToRemove.remove();
@@ -140,7 +200,7 @@ document.addEventListener('click', (e) => {
 
         const todosCardsVerificarSeAindaExisteAlgum = document.querySelectorAll(".card");
 
-        if (todosCardsVerificarSeAindaExisteAlgum.length === 0) {
+        if (todosCardsVerificarSeAindaExisteAlgum.length == 0) {
             textPatioVazio.style.display = "block";
             imgGriloVazio.style.display = "block";
             containerCards.style.flexDirection = "column";
@@ -148,6 +208,8 @@ document.addEventListener('click', (e) => {
     }
 });
 
+const textPatioVazio = document.querySelector(".text-patio-vazio"); 
+const imgGriloVazio = document.querySelector(".img-grilo-vazio"); 
 let tipoVeiculoFormatado;
 
 function criarCardVeiculo(idCard, nomeVeiculoCard, horaEntradaCard, placaCard, tipoVeiculoCard) {
@@ -183,42 +245,43 @@ function criarCardVeiculo(idCard, nomeVeiculoCard, horaEntradaCard, placaCard, t
 
     var cardTextHrEntrada = document.createElement("p");
     cardTextHrEntrada.className = "card-text-hora-entrar";
-    cardTextHrEntrada.textContent = horaEntradaCard;
+    cardTextHrEntrada.innerHTML = "Hora Entrada: " + horaEntradaCard;
 
     var cardTextPlaca = document.createElement("p");
     cardTextPlaca.className = "card-text-placa";
-    cardTextPlaca.textContent = placaCard;
+    cardTextPlaca.innerHTML = "Placa: " + placaCard;
 
-    var cardLink1 = document.createElement("button");
-    cardLink1.className = "card-button-open-modal btn btn-primary";
-    cardLink1.textContent = "Finalizar";
+    var cardBtnFinalizar = document.createElement("button");
+    cardBtnFinalizar.className = "card-button-open-modal btn btn-primary";
+    cardBtnFinalizar.textContent = "Finalizar";
 
-    var cardLink2 = document.createElement("button");
-    cardLink2.className = "card-button-delete-card btn btn-danger";
-    cardLink2.textContent = "Excluir";
+    var cardBtnExcluir = document.createElement("button");
+    cardBtnExcluir.className = "card-button-delete-card btn btn-danger";
+    cardBtnExcluir.textContent = "Excluir";
 
     cardBodyDiv.appendChild(cardTitle);
     cardBodyDiv.appendChild(cardSubtitle);
     cardBodyDiv.appendChild(cardTextHrEntrada);
     cardBodyDiv.appendChild(cardTextPlaca);
-    cardBodyDiv.appendChild(cardLink1);
-    cardBodyDiv.appendChild(cardLink2);
+    cardBodyDiv.appendChild(cardBtnFinalizar);
+    cardBodyDiv.appendChild(cardBtnExcluir);
     cardDiv.appendChild(cardBodyDiv);
 
     containerCards.appendChild(cardDiv)
 }
 
 function abrirModalFinalizarVeiculo(cardId, nomeVeiculoModal, horaEntradaModal, placaModal) {
+    let horaEntradaModalsubString = horaEntradaModal.substring(14, 19);
     let horaAtualSaida = obterHoraAtualFormatada();
-    let valorCalculado = calcularValor(horaEntradaModal, horaAtualSaida);
+    let valorCalculado = calcularValor(horaEntradaModalsubString, horaAtualSaida);
 
     let modalTitle = document.querySelector(".modal-title");
     let modalBody = document.querySelector(".modal-body");
 
     modalTitle.innerText = cardId + " | " + nomeVeiculoModal;
-    modalBody.innerText = `Hora Entrada: ${horaEntradaModal} | Hora Saida: ${horaAtualSaida} | Placa: ${placaModal} | Valor: R$ ${valorCalculado}`;
+    modalBody.innerHTML = ` ${horaEntradaModal} <br> Hora Saida: ${horaAtualSaida} <br> ${placaModal} <br> Valor: R$ ${valorCalculado}`;
 
-    const myModal = new bootstrap.Modal(document.querySelector(".modal"));
+    const myModal = new bootstrap.Modal(document.querySelector(".modal-finalizar-veiculo"));
     myModal.show();
 }
 
@@ -261,7 +324,6 @@ function calcularValor(horaEntradaCalcularValor, horaAtualSaidaCalcularValor) {
     }
 }
     
-
 function obterHoraAtualFormatada() {
     var dataAtual = new Date();
     var horas = dataAtual.getHours();
@@ -333,19 +395,21 @@ function salvarParametros() {
         element.style.display = "none";
     });    
 
+    const limiteMaxCarros = document.querySelector(".limite-max-carros");
+    const limiteMaxMotos = document.querySelector(".limite-max-motos");
+
+    limiteMaxCarros.innerText = parametros.parametroLimiteCarros;
+    limiteMaxMotos.innerText = parametros.parametroLimiteMotos;
+
     criarBoxesVeiculos(parametros.parametroLimiteCarros, parametros.parametroLimiteMotos);
 }
 
 function carregarParametros() {
-    // Obter a string JSON armazenada no localStorage
     const parametrosJSON = localStorage.getItem('parametros');
 
     if (parametrosJSON) {
-        // Converter a string JSON de volta para um objeto
         const parametros = JSON.parse(parametrosJSON);
 
-        // Agora você pode acessar os valores como parametros.parametro1, parametros.valor1, etc.
-        // Use esses valores para preencher os elementos HTML conforme necessário.
         document.getElementById("limite-veiculo-carros").value = parametros.parametroLimiteCarros;
         document.getElementById("limite-veiculo-motos").value = parametros.parametroLimiteMotos;
 

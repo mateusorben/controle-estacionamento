@@ -138,6 +138,12 @@ a {
     margin-left: 8px;
 }
 
+@media only screen and (max-width: 991px) {
+    .bi-cash-coin {
+        margin: 0px 0px 20px 7px;
+    }
+}
+
 @media only screen and (max-width: 767px) {
     .container-conteudo { 
         display: grid;
@@ -157,10 +163,14 @@ a {
         height: 85px;
         width: 85px;
     }
-  }
+}
 
   @media only screen and (max-width: 412px) {
     .container-patio {
         max-width: 340px;
     }
-  }
+
+    .navbar-brand {
+        font-size: 19px;
+    }
+}
